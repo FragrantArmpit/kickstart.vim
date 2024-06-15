@@ -123,18 +123,6 @@ set scrolloff=10
 
 " [[ Basic Keymaps ]]
 
-" Set highlight on search, but clear on pressing <Esc> in normal mode
-set hlsearch
-nnoremap <Esc> :nohlsearch<CR>
-
-" Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
-" for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
-" is not what someone will guess without a bit more experience.
-"
-" NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
-" or just use <C-\><C-n> to exit terminal mode
-tnoremap <Esc><Esc> <C-\><C-n>
-
 " Remap for dealing with word wrap
 nnoremap <expr> <silent> k v:count == 0 ? 'gk' : 'k'
 nnoremap <expr> <silent> j v:count == 0 ? 'gj' : 'j'
@@ -145,184 +133,13 @@ nnoremap <right> :echo "Use l to move!!"<CR>
 nnoremap <up> :echo "Use k to move!!"<CR>
 nnoremap <down> :echo "Use j to move!!"<CR>
 
-" Keybinds to make split navigation easier.
-"  Use CTRL+<hjkl> to switch between windows
-"
-"  See `:help wincmd` for a list of all window commands
-nnoremap <C-h> <C-w><C-h>
-nnoremap <C-l> <C-w><C-l>
-nnoremap <C-j> <C-w><C-j>
-nnoremap <C-k> <C-w><C-k>
-
-
-" [[ Install `vim-plug` plugin manager ]]
-"    See https://github.com/junegunn/vim-plug/ for more info
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-" [[ Install plugins ]]
-"  To check the current status of your plugins, run
-"    :PlugStatus
-"
-"  To update plugins you can run
-"    :PlugUpdate
-"
-" Note: Here is where you install your plugins.
-call plug#begin()
-" Detect tabstop and shiftwidth automatically
-Plug 'tpope/vim-sleuth'
-
-" "gc" to comment visual regions/lines
-Plug 'tpope/vim-commentary'
-
-" Adds git related signs to the gutter
-Plug 'airblade/vim-gitgutter'
-
-" Useful plugin to show you pending keybinds.
-Plug 'liuchengxu/vim-which-key'
-
-" Fuzzy Finder
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-
-" Enable LSP
-Plug 'prabirshrestha/vim-lsp'
-" Install language servers and configure them for vim-lsp
-Plug 'mattn/vim-lsp-settings'
-
-" Autocompletion
-"Plug 'prabirshrestha/asyncomplete.vim'
-" Use <Tab> to auto complete
-Plug 'ervandew/supertab'
-
-" Colorscheme
-Plug 'ghifarit53/tokyonight-vim'
-
-" Set airline as statusline
-Plug 'vim-airline/vim-airline'
-call plug#end()
-
-
 " [[ Configure plugins ]]
 " Set colorscheme
-set termguicolors
-let g:tokyonight_style = 'night' " available: night, storm
-let g:tokyonight_enable_italic = 0
-colorscheme tokyonight
+colorscheme 256_noir
 
+" Change highlighting of cursor line when entering/leaving Insert Mode
+set cursorline
+highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=233 guifg=NONE guibg=#121212
+autocmd InsertEnter * highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=234 guifg=NONE guibg=#1c1c1c
+autocmd InsertLeave * highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=233 guifg=NONE guibg=#121212
 
-" [[ Configure vim-which-key ]]
-call which_key#register('<Space>', "g:which_key_map")
-nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
-nnoremap <silent> <localleader> :<c-u>WhichKey  '<Space>'<CR>
-
-" Document existing key chains
-let g:which_key_map =  {}
-let g:which_key_map.c = { 'name' : '[C]ode' }
-let g:which_key_map.d = { 'name' : '[D]ocument' }
-let g:which_key_map.r = { 'name' : '[R]ename' }
-let g:which_key_map.s = { 'name' : '[S]earch' }
-let g:which_key_map.w = { 'name' : '[W]orkspace' }
-let g:which_key_map.t = { 'name' : '[T]oggle' }
-let g:which_key_map.h = { 'name' : 'Git [H]unk' }
-
-
-" [[ Configure fzf.vim ]]
-" See `:help fzf-vim`
-
-nmap <leader>sh :Helptags<CR>
-let g:which_key_map.s.h = '[S]earch [H]elp'
-nmap <leader>sk :Maps<CR>
-let g:which_key_map.s.k = '[S]earch [K]eymaps'
-nmap <leader>sf :Files<CR>
-let g:which_key_map.s.f = '[S]earch [F]iles'
-nmap <leader>sg :Rg<CR>
-let g:which_key_map.s.g = '[S]earch by [G]rep'
-nmap <leader>s. :History<CR>
-let g:which_key_map.s['.'] = '[S]earch Recent Files ("." for repeat)'
-nmap <leader><leader> :Buffers<CR>
-let g:which_key_map[' '] = '[ ] Find existing buffers'
-
-nmap <leader>/ :BLines<CR>
-let g:which_key_map['/'] = '[/] Fuzzily search in current buffer'
-
-
-" [[ Configure LSP ]]
-" NOTE: Install new language server using `:LspInstallServer` in the filetype
-" you are trying to install LSP for.
-" For example, if you want LSP server for C/C++, type
-" `:LspInstallServer clangd` in a C/C++ buffer.
-
-" Performance related settings, requires Vim 8.2+
-let g:lsp_use_native_client = 1
-let g:lsp_semantic_enabled = 0
-let g:lsp_format_sync_timeout = 1000
-
-function! s:on_lsp_buffer_enabled() abort
-  setlocal omnifunc=lsp#complete
-  if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-
-  " Keymaps
-  " Go to previous diagnostic message
-  nmap <buffer> [d <plug>(lsp-previous-diagnostic)
-  " Go to next diagnostic message
-  nmap <buffer> ]d <plug>(lsp-next-diagnostic)
-
-  nmap <buffer> <leader>rn <plug>(lsp-rename)
-  let g:which_key_map.r.n = '[R]e[n]ame'
-  nmap <buffer> <leader>ca <plug>(lsp-code-action-float)
-  let g:which_key_map.c.a = '[C]ode [A]ction'
-
-  " [G]oto [D]efinition
-  nmap <buffer> gd <plug>(lsp-definition)
-  " [G]oto [R]eferences
-  nmap <buffer> gr <plug>(lsp-references)
-  " [G]oto [I]mplementation
-  nmap <buffer> gI <plug>(lsp-implementation)
-
-  nmap <buffer> <leader>D <plug>(lsp-peek-type-definition)
-  let g:which_key_map.D = 'Type [D]efinition'
-  nmap <buffer> <leader>ds <plug>(lsp-document-symbol-search)
-  let g:which_key_map.d.s = '[D]ocument [S]ymbols'
-  nmap <buffer> <leader>ws <plug>(lsp-workspace-symbol-search)
-  let g:which_key_map.w.s = '[W]orkspace [S]ymbols'
-
-  " See `:help K` for why this keymap
-  " Hover Documentation
-  nmap <buffer> K <plug>(lsp-hover)
-  " Signature Documentation
-  nmap <buffer> <C-k> <plug>(lsp-signature-help)
-
-  " Lesser used LSP functionality
-  " [G]oto [D]eclaration
-  nmap <buffer> gD <plug>(lsp-declaration)
-
-  " Create a command `:Format` local to the LSP buffer
-  command Format LspDocumentFormatSync
-endfunction
-
-augroup lsp_install
-  au!
-  " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-  autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
-
-
-" [[ Configure completion ]]
-" Set Omni Completion
-"  See `:help compl-omni` and `:help omnifunc`
-filetype plugin on
-set omnifunc=syntaxcomplete#Complete
-
-" Enter key confirms the current selection when completion is open
-inoremap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
-
-" <Tab> triggers Omni completion (<C-x><C-o>) in a coding context
-let g:SuperTabDefaultCompletionType = "context"
-
-
-" The line beneath this is called `modeline`. See `:help modeline`
-" vim: ts=2 sts=2 sw=2 et
