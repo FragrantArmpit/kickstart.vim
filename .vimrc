@@ -40,7 +40,7 @@ let maplocalleader = ' '
 " These are options believed by many Vim users to be essential.
 " For more information, see `:h vim_diff.txt` in Neovim
 " I will skip the 
-filetype on
+filetype plugin indent on
 syntax on
 set autoindent autoread background=dark
 set backspace=indent,eol,start belloff=all
@@ -142,4 +142,6 @@ set cursorline
 highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=233 guifg=NONE guibg=#121212
 autocmd InsertEnter * highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=234 guifg=NONE guibg=#1c1c1c
 autocmd InsertLeave * highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=233 guifg=NONE guibg=#121212
+
+let g:rustfmt_autosave = 1
 
