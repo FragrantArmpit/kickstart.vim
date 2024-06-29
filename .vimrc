@@ -1,147 +1,105 @@
-"
-" =====================================================================
-" ========                                    .-----.          ========
-" ========         .----------------------.   | === |          ========
-" ========         |.-""""""""""""""""""-.|   |-----|          ========
-" ========         ||                    ||   | === |          ========
-" ========         ||   KICKSTART.VIM    ||   |-----|          ========
-" ========         ||                    ||   | === |          ========
-" ========         ||                    ||   |-----|          ========
-" ========         ||:Tutor              ||   |:::::|          ========
-" ========         |'-..................-'|   |____o|          ========
-" ========         `"")----------------(""`   ___________      ========
-" ========        /::::::::::|  |::::::::::\  \ no mouse \     ========
-" ========       /:::========|  |==hjkl==:::\  \ required \    ========
-" ========      '""""""""""""'  '""""""""""""'  '""""""""""'   ========
-" ========                                                     ========
-" =====================================================================
-"
-" Kickstart.vim is a starting point for your Vim configuration,
-" heavily inspired by Kickstart.nvim.
-"
-" If you are using Neovim, you should use Kickstart.nvim instead:
-" https://github.com/nvim-lua/kickstart.nvim
-" (use `gx` keybinding to open the link)
-"
-" If you have any question while reading the .vimrc,
-" you should use Vim's built-in help, triggered by `:help X`.
-" We also provide a keymap "<space>sh" [s]earch [h]elp documentation.
-"
-
-
-" Set <space> as the leader key
-" See `:help mapleader`
+" Use space as mapleader and maplocalleader
 let mapleader=' '
-let maplocalleader = ' '
+let maplocalleader=' '
 
-
-" [[ Setting Neovim default options ]]
-" These are some of the options enabled by default in Neovim
-" These are options believed by many Vim users to be essential.
-" For more information, see `:h vim_diff.txt` in Neovim
-" I will skip the 
+" Enable filetype detection, plugins, and indentation rules
 filetype plugin indent on
+
+" Enable syntax highlighting
 syntax on
-set autoindent autoread background=dark
-set backspace=indent,eol,start belloff=all
-set display=lastline encoding=utf-8 hidden
+
+" Automatically read files when changed outside of Vim
+set autoread
+
+" Set background to dark for dark-themed color schemes
+set background=dark
+
+" Configure backspace behavior to allow deleting over indents, end of line, and start of line
+set backspace=indent,eol,start
+
+" Disable all audible bells
+set belloff=all
+
+" Display the last line of the file if it doesn't fill the screen
+set display=lastline
+
+" Set character encoding to UTF-8 and enable hidden buffers
+set encoding=utf-8 hidden
+
+" Always show status line with file information
+set laststatus=2
+
+" Show current cursor position and file status in the ruler
+set ruler
+
+" Show incomplete commands in the last line of the screen
+set showcmd
+
+" Use smart tab behavior based on context
+set smarttab
+
+" Disable jumping to the start of the line with cursor movements
+set nostartofline
+
+" Set buffer switching behavior to switch to the last used window/tab
+set switchbuf=uselast
+
+" Enable enhanced command-line completion with a menu
+set wildmenu
+
+" Set history limit and enable incremental and smart case-sensitive searching
 set history=10000 hlsearch incsearch
-set nojoinspaces laststatus=2 ruler
-set showcmd smarttab nostartofline
-set switchbuf=uselast wildmenu "wildoptions=pum,tagfile
 
-" [[ Settings other options ]]
-" See `:help :set`
-" NOTE: You can change these options as you wish!
-"  For more options, you can see `:help option-list`
+" Enable smart indentation and auto-indentation
+set smartindent autoindent
 
-" Make line numbers default
+" Use 2 spaces instead of tabs for indentation
+set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+
+" Show line numbers
 set number
-" You can also add relative line numbers, to help with jumping.
-"  Experiment for yourself to see if you like it!
-"set relativenumber
 
-" Enable mouse mode, can be useful for resizing splits for example!
-set mouse=a
-
-" Don't show the mode, since it's already in the status line
+" Hide mode display (e.g., -- INSERT --) at the bottom
 set noshowmode
 
-" Sync clipboard between OS and Neovim.
-"  Remove this option if you want your OS clipboard to remain independent.
-"  See `:help 'clipboard'`
+" Use system clipboard for copy/paste operations
 set clipboard=unnamedplus
 
-" Enable break indent
+" Enable break indenting to visually separate wrapped lines
 set breakindent
 
-" Save undo history
-"  By default, undo files (.file.txt.un~) are saved in the current directory.
-"  This makes the file system very messy, so undofile is disabled by default.
-"
-"  If would like to enable undofile, I recommend you to change undodir:
-"  1. Create the undo directory: `:! mkdir -p ~/.local/state/vim/undo`
-"  2. Uncomment the following line starting with "set undodir" and save the file
-"  3. Source the .vimrc: `:source ~/.vimrc`
-"  4. Now undo history will persist between Vim sessions
-"
-"  NOTE: See `:help undofile` and `:help undodir` for more information
-"    You may change the undodir to another directory you prefer
-"set undodir=~/.local/state/vim/undo//
-"set undofile
+" Configure undo directory and enable persistent undo history
+set undodir=~/.local/state/vim/undo//
+set undofile
 
-" Case-insensitive searching UNLESS \C or capital in search
-set ignorecase
-set smartcase
+" Ignore case in search commands, but use smart case sensitivity when uppercase is used
+set ignorecase smartcase
 
-" Keep signcolumn on by default
+" Show sign column for displaying signs such as breakpoints
 set signcolumn=yes
 
-" Decrease update time
+" Set update time for CursorHold event in milliseconds
 set updatetime=250
 
-" Decrease mapped sequence wait time
-" Displays vim-which-key sooner
+" Set timeout length for mappings and commands in milliseconds
 set timeoutlen=300
 
-" Configure how new splits should be opened
-set splitright
-set splitbelow
+" Open new splits to the right and below the current window
+set splitright splitbelow
 
-" Sets how vim will display certain whitespace characters in the editor.
+" Show invisible characters like tabs and trailing spaces
 set list
 set listchars=tab:»\ ,trail:·,nbsp:␣
-" Use the following settings if you do not want unicode characters
-"set listchars=tab:>\ ,trail:-,nbsp:+
 
-" Show which line your cursor is on
-set cursorline
-
-" Minimal number of screen lines to keep above and below the cursor
+" Set minimum number of screen lines to keep above and below the cursor
 set scrolloff=10
 
-
-" [[ Basic Keymaps ]]
-
-" Remap for dealing with word wrap
-nnoremap <expr> <silent> k v:count == 0 ? 'gk' : 'k'
-nnoremap <expr> <silent> j v:count == 0 ? 'gj' : 'j'
-
-" TIP: Disable arrow keys in normal mode
-nnoremap <left> :echo "Use h to move!!"<CR>
-nnoremap <right> :echo "Use l to move!!"<CR>
-nnoremap <up> :echo "Use k to move!!"<CR>
-nnoremap <down> :echo "Use j to move!!"<CR>
-
-" [[ Configure plugins ]]
-" Set colorscheme
+" Set color scheme
 colorscheme 256_noir
 
-" Change highlighting of cursor line when entering/leaving Insert Mode
-set cursorline
-highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=233 guifg=NONE guibg=#121212
-autocmd InsertEnter * highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=234 guifg=NONE guibg=#1c1c1c
-autocmd InsertLeave * highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=233 guifg=NONE guibg=#121212
+" Enable autosave with dprint on save for specific file types
+autocmd BufWritePost *.html,*.js,*.jsx,*.ts,*.tsx,*.json silent execute '!dprint fmt %'
 
+" Enable autosave for Rust files with rustfmt
 let g:rustfmt_autosave = 1
 
